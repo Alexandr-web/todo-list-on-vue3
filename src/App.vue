@@ -1,10 +1,10 @@
 <template>
   <div class="container">
     <vTaskInput v-on:onAddTask="onAddTask" />
-    <h1 class="center-align" v-if="!tasks.length">No tasks</h1>
+    <h1 class="center-align" v-if="!getTasks.length">No tasks</h1>
     <ul v-else>
       <vTaskCard 
-        v-for="(task, i) of tasks"
+        v-for="(task, i) of getTasks"
         v-bind:key="i"
         v-bind:task="task"
         v-on:onRemove="onRemove"
@@ -17,7 +17,8 @@
 <script>
 import vTaskCard from './components/vTaskCard';
 import vTaskInput from './components/vTaskInput';
-import { ref } from 'vue';
+import { computed } from 'vue';
+import { useStore } from 'vuex';
 
 export default {
   name: 'App',
@@ -26,23 +27,17 @@ export default {
     vTaskInput
   },
   setup() {
-    let tasks = ref([]);
-
-    const onDone = id => {
-      tasks.value.find(item => item.id === id).status = !tasks.value.find(item => item.id === id).status;
-    }
-    const onRemove = id => {
-      tasks.value = tasks.value.filter(item => item.id !== id);
-    }
-    const onAddTask = task => {
-      tasks.value.push(task);
-    }
+    const store = useStore();
+    const getTasks = computed(() => store.getters.getTasks);
+    const onDone = id => store.dispatch('doneTasks', id);
+    const onRemove = id => store.dispatch('removeTasks', id);
+    const onAddTask = task => store.dispatch('addTasks', task);
 
     return {
-      tasks,
       onDone,
       onRemove,
-      onAddTask
+      onAddTask,
+      getTasks
     }
   }
 }

@@ -29,7 +29,7 @@
     "gulp-concat": "^2.6.1",
     "gulp-sass": "^4.1.0",
     "normalize.css": "^8.0.1",
-    "vuex": "^3.6.2"
+    "vuex": "^4.0.0"
   },
   "eslintConfig": {
     "root": true,
